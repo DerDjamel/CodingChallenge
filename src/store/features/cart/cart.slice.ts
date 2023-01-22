@@ -33,6 +33,11 @@ export const cartSlice = createSlice({
       if (item) {
         item.quantity += 1;
       }
+      // special case for +1 free milk
+      if (item?.product.name.includes('milk')) {
+        item.quantity =
+          item.quantity / 3 === 0 ? item.quantity + 1 : item.quantity;
+      }
     },
     decrementQuantity: (state, action: PayloadAction<{ id: string }>) => {
       const item = state.items.find(
@@ -40,7 +45,6 @@ export const cartSlice = createSlice({
       );
       if (item) {
         // if the product quantity is 1 in the cart and the user decrement then remove the product from the cart
-        console.log(item.quantity === 1);
         if (item.quantity === 1) {
           state.items = state.items.filter(
             (item) => item.product.id !== action.payload.id
@@ -59,11 +63,6 @@ export const totals = createSelector([items], (items) => {
   let subtotal: number = 0;
   let discount: number = 0;
 
-  // calculate the subtotal + number of milk/butter products for later calc of dicount
-  items.map((item) => {
-    subtotal += item.quantity * item.product.price;
-  });
-
   //get the butter cart item
   const butterCartItem = items.find((item) =>
     item.product.name.includes('Butter')
@@ -79,6 +78,11 @@ export const totals = createSelector([items], (items) => {
     butterDiscount =
       Math.trunc((butterCartItem?.quantity || 0) / 2) * (1 * 0.5);
   }
+
+  // calculate the subtotal + number of milk/butter products for later calc of dicount
+  items.map((item) => {
+    subtotal += item.quantity * item.product.price;
+  });
 
   discount = milkdiscount + butterDiscount;
 
