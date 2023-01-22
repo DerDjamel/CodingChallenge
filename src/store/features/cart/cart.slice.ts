@@ -36,7 +36,7 @@ export const cartSlice = createSlice({
       // special case for +1 free milk
       if (item?.product.name.includes('milk')) {
         item.quantity =
-          item.quantity / 3 === 0 ? item.quantity + 1 : item.quantity;
+          item.quantity % 3 === 0 ? item.quantity + 1 : item.quantity;
       }
     },
     decrementQuantity: (state, action: PayloadAction<{ id: string }>) => {
