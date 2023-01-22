@@ -1,14 +1,16 @@
 import { FC } from 'react';
-import { useAppDispatch } from '../store';
+import { useAppDispatch, useAppSelector } from '../store';
 import {
   decrementQuantity,
-  incrementQuantity
+  incrementQuantity,
+  totals
 } from '../store/features/cart/cart.slice';
 import { toCurrency } from '../utils/helpers';
 import { CartItemType } from '../utils/types';
 
 const CartItem: FC<CartItemType> = ({ product, quantity }) => {
   const dispatch = useAppDispatch();
+  const { butterDiscount } = useAppSelector(totals);
 
   return (
     <article className="flex items-center border-b-2 border-gray-400 mb-4 p-2">
@@ -49,7 +51,18 @@ const CartItem: FC<CartItemType> = ({ product, quantity }) => {
       </div>
 
       <div className="basis-1/5 text-right font-semibold">
-        {toCurrency(product.price * quantity)}
+        {butterDiscount > 0 && product.name.includes('bread') ? (
+          <>
+            <div>
+              <span className="text-red-500 line-through">
+                {toCurrency(product.price)}
+              </span>
+            </div>
+            <div>{toCurrency(product.price * 0.5)}</div>
+          </>
+        ) : (
+          <div>{toCurrency(product.price * quantity)}</div>
+        )}
       </div>
     </article>
   );

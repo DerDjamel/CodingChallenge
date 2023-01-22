@@ -85,6 +85,7 @@ export const totals = createSelector([items], (items) => {
   return {
     subtotal,
     discount,
+    butterDiscount,
     total: subtotal - discount
   };
 });
