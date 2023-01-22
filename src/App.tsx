@@ -8,11 +8,11 @@ function App() {
     <div className="App">
       <NavigationBar />
       <main className="container mx-auto mt-5">
-        <div className="flex justify-between">
-          <div className="basis-1/2 p-12">
+        <div className="flex flex-col lg:flex-row justify-between">
+          <div className="sm:basis-1/2 basis-full p-12">
             <ProductsList />
           </div>
-          <div className="basis-1/2 p-4">
+          <div className="sm:basis-1/2 basis-full p-4">
             <Cart />
           </div>
         </div>
