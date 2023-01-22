@@ -51,7 +51,13 @@ export const cartSlice = createSlice({
           );
           return;
         }
+        // special case for +1 free milk
         item.quantity -= 1;
+        if (item?.product.name.includes('milk')) {
+          console.log(item.quantity);
+          item.quantity =
+            item.quantity % 3 === 0 ? item.quantity - 1 : item.quantity;
+        }
       }
     }
   }
